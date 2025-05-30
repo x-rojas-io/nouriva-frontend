@@ -22,7 +22,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-lime-50 text-gray-800 p-8">
-      <h1 className="text-3xl font-bold text-center text-emerald-700 mb-8">Nouriva Keto Meal Plan</h1>
+      <h1 className="text-3xl font-bold text-center text-emerald-700 mb-8">Nouriva Club</h1>
       {days.map(day => (
         <div key={day.day} className="mb-10">
           <h2 className="text-xl font-semibold text-amber-600 mb-4">Day {day.day}</h2>
