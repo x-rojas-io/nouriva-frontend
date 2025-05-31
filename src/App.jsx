@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 function App() {
   const [menu, setMenu] = useState([]);
@@ -44,7 +45,9 @@ function App() {
                   <p className="text-xs uppercase text-emerald-600 font-bold mb-1">
                     {type}
                   </p>
-                  <h3 className="text-lg font-bold mb-2">{meal.name}</h3>
+                  <Link to={`/meal/${meal.id}`} className="text-lg font-bold text-emerald-700 hover:underline mb-2 block">
+                    {meal.name}
+                  </Link>
                   <ul className="list-disc pl-5 text-sm text-gray-700">
                     {Object.entries(meal.ingredients)
                       .slice(0, 3)
