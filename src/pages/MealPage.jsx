@@ -18,7 +18,16 @@ function MealPage() {
   return (
     <div className="p-8 max-w-3xl mx-auto">
       <h1 className="text-3xl font-bold mb-4">{meal.name}</h1>
-      {meal.image && <img src={meal.image} alt={meal.name} className="mb-6 rounded" />}
+      {meal.image && (
+        <div className="flex justify-center items-center mb-6" style={{ height: '80vh' }}>
+          <img
+            src={meal.image}
+            alt={meal.name}
+            className="rounded"
+            style={{ width: '80%', height: '80%', objectFit: 'cover' }}
+          />
+        </div>
+      )}
       <h2 className="text-xl font-semibold mb-2">Ingredients</h2>
       <ul className="list-disc pl-6 mb-4">
         {Object.entries(meal.ingredients).map(([name, data], idx) => (
