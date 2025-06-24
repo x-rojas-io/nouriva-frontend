@@ -1,47 +1,84 @@
-import React from "react";
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-function MealPage() {
+function MealsPage() {
   const { mealId } = useParams();
+  const navigate = useNavigate();
   const [meal, setMeal] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios.get(`https://nouriva-backend.onrender.com/meal/${mealId}`)
-      .then(res => setMeal(res.data))
-      .catch(err => console.error(err));
+      .then((res) => {
+        setMeal(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error loading meal:", err);
+        setLoading(false);
+      });
   }, [mealId]);
 
-  if (!meal) return <div>Loading...</div>;
+  if (loading) return (
+    <div className="text-center mt-10 text-lg text-amber-700">
+      Loading meal details...
+    </div>
+  );
+
+  if (!meal) return (
+    <div className="text-center mt-10 text-red-600">
+      Meal not found.
+    </div>
+  );
 
   return (
-    <div className="p-8 max-w-3xl mx-auto">
-      <h1 className="text-3xl font-bold mb-4">{meal.name}</h1>
-      {meal.image && (
-        <div className="flex justify-center items-center mb-6" style={{ height: '80vh' }}>
+    <div className="min-h-screen bg-lime-50 text-gray-800 p-8">
+      <div className="flex justify-between items-center mb-6">
+        <button
+          onClick={() => navigate(-1)}
+          className="text-emerald-600 font-medium hover:underline"
+        >
+          ← Back
+        </button>
+        <h1 className="text-2xl font-bold text-center text-emerald-700 flex-grow">
+          {meal.name}
+        </h1>
+        <div className="w-16" /> {/* spacer to balance the flex layout */}
+      </div>
+
+      <div className="md:flex md:gap-6 bg-white border-l-4 border-emerald-500 p-6 rounded shadow">
+        {meal.image && (
           <img
             src={meal.image}
             alt={meal.name}
-            className="rounded"
-            style={{ width: '80%', height: '80%', objectFit: 'cover' }}
+            className="w-full md:w-72 h-60 object-cover rounded mb-4 md:mb-0"
           />
+        )}
+        <div className="flex-1">
+          <h2 className="text-lg font-semibold text-amber-600 mb-2">
+            Ingredients
+          </h2>
+          <ul className="list-disc pl-5 text-sm text-gray-700 mb-4">
+            {Object.entries(meal.ingredients).map(([name, info], i) => (
+              <li key={i}>
+                {info.quantity} {info.unit} {name}
+              </li>
+            ))}
+          </ul>
+
+          <h2 className="text-lg font-semibold text-amber-600 mb-2">
+            Steps
+          </h2>
+          <div className="space-y-2">
+            {meal.steps.map((step, index) => (
+              <p key={index}>{step}</p>
+            ))}
+          </div>
         </div>
-      )}
-      <h2 className="text-xl font-semibold mb-2">Ingredients</h2>
-      <ul className="list-disc pl-6 mb-4">
-        {Object.entries(meal.ingredients).map(([name, data], idx) => (
-          <li key={idx}>{name}: {data.quantity} {data.unit}</li>
-        ))}
-      </ul>
-      <h2 className="text-xl font-semibold mb-2">Instructions</h2>
-      <ul className="list-none pl-2 text-sm text-gray-700 space-y-2">
-        {meal.steps.map((step, index) => (
-        <li key={index}>{step}</li>
-        ))}
-      </ul>
+      </div>
     </div>
   );
 }
 
-export default MealPage;
+export default MealsPage;
