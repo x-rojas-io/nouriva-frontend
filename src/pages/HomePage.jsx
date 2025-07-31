@@ -29,9 +29,7 @@ function HomePage() {
       <h1 className="text-3xl font-bold text-center text-emerald-700 mb-8">
         Nouriva Club
       </h1>
-      <p className="text-center italic text-sm text-gray-500 mb-6">
-        All recipes are designed for 1 adult serving.
-      </p>
+      
       {menu.map((day, index) => (
         <div key={index} className="mb-12">
           <h2 className="text-xl font-semibold text-amber-600 mb-4">
@@ -41,22 +39,36 @@ function HomePage() {
             {["breakfast", "lunch", "dinner"].map((type) => {
               const meal = day[type];
               return (
-                <div key={meal.id} className="bg-white border-l-4 border-emerald-500 p-4 rounded shadow">
-                  <p className="text-xs uppercase text-emerald-600 font-bold mb-1">
-                    {type}
+                <div
+                  key={meal.id}
+                  className="bg-white rounded-xl shadow overflow-hidden"
+                >
+                  <p className="bg-gray-100 text-xs uppercase font-semibold text-gray-700 px-3 py-2">
+                    {type.charAt(0).toUpperCase() + type.slice(1)}
                   </p>
-                  <Link to={`/meal/${meal.id}`} className="text-lg font-bold text-emerald-700 hover:underline mb-2 block">
-                    {meal.name}
+
+                  <Link to={`/meal/${meal.id}`}>
+                    <img
+                      src={meal.image}
+                      alt={meal.name}
+                      className="w-full h-48 object-cover"
+                    />
+                    <div className="p-4">
+                      <h3 className="text-lg font-extrabold text-gray-900 mb-1">
+                        {meal.name}
+                      </h3>
+                      <div className="flex items-center text-sm text-gray-500">
+                        <svg
+                          className="w-4 h-4 mr-1"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path d="M6 2a2 2 0 00-2 2v2h12V4a2 2 0 00-2-2H6zM4 8v8a2 2 0 002 2h8a2 2 0 002-2V8H4z" />
+                        </svg>
+                        All recipes are designed for 1 adult serving.
+                      </div>
+                    </div>
                   </Link>
-                  <ul className="list-disc pl-5 text-sm text-gray-700">
-                    {Object.entries(meal.ingredients)
-                      .slice(0, 3)
-                      .map(([name, info], i) => (
-                        <li key={i}>
-                          {info.quantity} {info.unit} {name}
-                        </li>
-                      ))}
-                  </ul>
                 </div>
               );
             })}
